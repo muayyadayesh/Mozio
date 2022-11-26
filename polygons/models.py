@@ -29,8 +29,8 @@ class Provider(models.Model):
     ]
 
     name = models.CharField(max_length=50)
-    email = models.EmailField(max_length=254)
-    phone = PhoneNumberField()
+    email = models.EmailField(max_length=254, unique=True)
+    phone = PhoneNumberField(unique=True)
     language = models.CharField(choices=LANGUAGES,
                                 default='EN', max_length=5)
     currency = models.CharField(choices=CURRENCIES,

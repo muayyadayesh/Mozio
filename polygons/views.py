@@ -21,6 +21,7 @@ class ProvidersListApiView(APIView):
     authentication_classes = [authentication.BasicAuthentication]
     permission_classes = [permissions.AllowAny]
 
+    # List all providers
     def get(self, request, format=None):
         '''
         List all the providers in system
@@ -29,6 +30,7 @@ class ProvidersListApiView(APIView):
         serializer = ProviderSerializer(providers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # create new provider with service area
     def post(self, request, *args, **kwargs):
         '''
         Create new provider with the payload
