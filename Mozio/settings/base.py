@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'polygons',
 ]
 
-print(os.environ.get('settings'))
 if env('DJANGO_SETTINGS_MODULE') != 'Mozio.settings.local':
     INSTALLED_APPS.append("django_extensions")
 

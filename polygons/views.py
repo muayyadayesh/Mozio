@@ -18,8 +18,7 @@ class ProvidersListApiView(APIView):
     * Requires token authentication.
     * All users are able to access this view.
     """
-    # authentication_classes = [authentication.BasicAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     # List all providers
     def get(self, request, format=None):
@@ -45,7 +44,7 @@ class ProvidersListApiView(APIView):
 
 class ProviderDetailApiView(APIView):
     # permission to check if user is authenticated
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_object(self, provider_id):
         '''
@@ -107,17 +106,24 @@ class ProviderDetailApiView(APIView):
 
 
 class PolygonServiceAreasApiView(APIView):
+    permission_classes = [permissions.AllowAny]
+    # get service areas within a specific polygon
 
     def get(self, request, longitude, latitude, *args, **kwargs):
         """
         Takes latitude, longitude and returns a list of available polygons inside.
         """
         # we can also lookup by radius, but disabled for now
-        # radius = self.request.query_params.get('radius')
-        polygons = Provider.objects.all()
-        results = [item for item in polygons if check_coordinates(long=float(
-            longitude), lat=float(latitude), area_coordinates=item.service_area.geo_info)]
+        # radius = self.request.query_params.get('radius') || take radius from params
+        try:
+            longitude = float(longitude)
+            latitude = float(latitude)
+            polygons = Provider.objects.all()
+            results = [item for item in polygons if check_coordinates(long=float(
+                longitude), lat=float(latitude), area_coordinates=item.service_area.geo_info)]
 
-        serializer = ProviderSerializer(results, many=True)
-        return Response({'polygons': serializer.data},
-                        status=status.HTTP_200_OK)
+            serializer = ProviderSerializer(results, many=True)
+            return Response({'service_areas': serializer.data},
+                            status=status.HTTP_200_OK)
+        except Exception as ex:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
