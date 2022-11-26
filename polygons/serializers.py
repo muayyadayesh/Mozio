@@ -35,3 +35,10 @@ class ProviderSerializer(serializers.ModelSerializer):
             currency=validated_data.pop('currency')
         )
         return provider
+
+    def update(self, instance, validated_data):
+        service_area_data = validated_data.pop('service_area')
+        service_area = ServiceAreaSerializer.update(
+            self, instance=instance.service_area, validated_data=service_area_data)
+        instance.service_area = service_area
+        return super().update(instance, validated_data)

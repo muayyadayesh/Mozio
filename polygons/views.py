@@ -18,8 +18,8 @@ class ProvidersListApiView(APIView):
     * Requires token authentication.
     * All users are able to access this view.
     """
-    authentication_classes = [authentication.BasicAuthentication]
-    permission_classes = [permissions.AllowAny]
+    # authentication_classes = [authentication.BasicAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     # List all providers
     def get(self, request, format=None):
@@ -42,6 +42,71 @@ class ProvidersListApiView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class ProviderDetailApiView(APIView):
+    # permission to check if user is authenticated
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, provider_id):
+        '''
+        Helper get method to fetch specific provider obejct with given provider_id
+        '''
+        try:
+            return Provider.objects.get(id=provider_id)
+        except Provider.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, provider_id, *args, **kwargs):
+        '''
+        Retrieves a provider with a given provider_id
+        '''
+        provider_instance = self.get_object(provider_id)
+        if not provider_instance:
+            return Response(
+                {f"message": "provider with the id:{provider_id} does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = ProviderSerializer(provider_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 4. Update
+    def put(self, request, provider_id, *args, **kwargs):
+        '''
+        Updates provider with the provider_id if exists
+        '''
+        provider_instance = self.get_object(provider_id)
+        if not provider_instance:
+            return Response(
+                {f"message": "provider with the id:{provider_id} does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = ProviderSerializer(
+            instance=provider_instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, request, provider_id, *args, **kwargs):
+        '''
+        Deletes provider object if provided id exists
+        '''
+        provider_instance = self.get_object(provider_id)
+        if not provider_instance:
+            return Response(
+                {f"message": "provider with the id:{provider_id} does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        provider_instance.delete()
+        return Response(
+            status=status.HTTP_200_OK
+        )
+
+
+# TODO: complete polygon request
     # def get(self, request, format=None):
     #     """
     #     Takes latitude, longitude and returns a list

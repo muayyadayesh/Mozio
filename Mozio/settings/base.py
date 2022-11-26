@@ -167,3 +167,8 @@ MEDIA_ROOT = str(BASE_DIR / 'media')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# session strategy
+CSRF_COOKIE_NAME = 'tokenname_sessionid'
+SESSION_COOKIE_NAME = CSRF_COOKIE_NAME
+SESSION_COOKIE_SECURE = False
