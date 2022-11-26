@@ -22,11 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_secret_key())
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
 # define env globally
 env = environ.Env()
@@ -35,9 +30,10 @@ if READ_DOT_ENV_FILE:
     env.read_env(str(BASE_DIR / '.env'))
 
 
-# specify to upload for S3 or local
-FILE_UPLOAD_STORAGE = "local" if os.environ.get(
-    'settings') != 'Production' else "s3"
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('DJANGO_SECRET_KEY', default=get_random_secret_key())
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
 
 # Application definition
@@ -56,7 +52,8 @@ INSTALLED_APPS = [
     'polygons',
 ]
 
-if os.environ.get('settings') != 'Production':
+print(os.environ.get('settings'))
+if env('DJANGO_SETTINGS_MODULE') != 'Mozio.settings.local':
     INSTALLED_APPS.append("django_extensions")
 
 # JWT & session for rest-framework

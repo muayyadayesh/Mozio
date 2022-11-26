@@ -106,21 +106,18 @@ class ProviderDetailApiView(APIView):
         )
 
 
-# TODO: complete polygon request
-    # def get(self, request, format=None):
-    #     """
-    #     Takes latitude, longitude and returns a list
-    #     of available polygons inside.
-    #     """
-    #     longitude = self.request.query_params.get('longitude')
-    #     latitude = self.request.query_params.get('latitude')
-    #     # we can also lookup by radius, but disabled for now
-    #     # radius = self.request.query_params.get('radius')
+class PolygonServiceAreasApiView(APIView):
 
-    #     polygons = Provider.objects.all()
-    #     results = [item for item in polygons if check_coordinates(long=float(
-    #         longitude), lat=float(latitude), coordinates=item.service_area.geo_info)]
+    def get(self, request, longitude, latitude, *args, **kwargs):
+        """
+        Takes latitude, longitude and returns a list of available polygons inside.
+        """
+        # we can also lookup by radius, but disabled for now
+        # radius = self.request.query_params.get('radius')
+        polygons = Provider.objects.all()
+        results = [item for item in polygons if check_coordinates(long=float(
+            longitude), lat=float(latitude), area_coordinates=item.service_area.geo_info)]
 
-    #     serializer = ProviderSerializer(results, many=True)
-    #     return Response({'polygons': serializer.data},
-    #                     status=status.HTTP_200_OK)
+        serializer = ProviderSerializer(results, many=True)
+        return Response({'polygons': serializer.data},
+                        status=status.HTTP_200_OK)
