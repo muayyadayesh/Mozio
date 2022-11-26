@@ -52,22 +52,20 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
+    'phonenumber_field',
     'polygons',
 ]
 
 if os.environ.get('settings') != 'Production':
     INSTALLED_APPS.append("django_extensions")
 
-
-# JWT
+# JWT & session for rest-framework
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication'
-
+        'rest_framework.authentication.SessionAuthentication',
     ), 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
@@ -96,6 +94,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
+
         },
     },
 ]

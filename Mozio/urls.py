@@ -24,6 +24,5 @@ schema_view = get_swagger_view(title='Mozio API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(urls)),
-    re_path(r'api/', schema_view),
-
+    re_path(r'api/', schema_view),  # Swagger schema
 ]
