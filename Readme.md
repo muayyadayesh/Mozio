@@ -61,7 +61,7 @@ https://app3oebcxb.execute-api.us-west-1.amazonaws.com/production/api
 ### Flow
 
 - Goto the `api/providers`
-- Insert a new provider (you can use the above sample), take into account the geo_info array form.
+- Insert a new provider (you can use the above sample), take into account the geo_info array form
 - Goto `api/polygon/long/lat`, replacing the (long) & (lat) with the point coordinates to lookup for
 
 ### Test credentials
