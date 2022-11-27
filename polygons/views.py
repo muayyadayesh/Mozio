@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework import (permissions, status)
 from rest_framework.decorators import permission_classes
 from rest_framework.generics import GenericAPIView
@@ -8,6 +9,10 @@ from rest_framework.views import APIView
 from polygons.models import Provider
 from polygons.serializers import ProviderSerializer
 from polygons.utils.coordinates_check import check_coordinates
+
+
+def index(request):
+    return HttpResponse('Head to /api')
 
 
 class ProvidersListApiView(APIView):

@@ -1,0 +1,69 @@
+service: mozio
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+  - serverless-python-requirements
+  - serverless-wsgi
+  - serverless-deployment-bucket
+useDotenv: true
+
+custom:
+  dotenv:
+    logging: false
+  pythonRequirements:
+    dockerizePip: non-linux
+    slim: true
+    zip: true
+    fileName: requirements.txt
+  stage: ${env:STAGE,'production'}
+  wsgi:
+    app: Mozio.wsgi.application
+    packRequirements: false
+  prune:
+    automatic: true
+    number: 3
+
+functions:
+  - app:
+      handler: wsgi_handler.handler
+      events:
+        - http: ANY /
+        - http: ANY /{proxy+}
+      timeout: 30
+
+provider:
+  name: aws
+  role: arn:aws:iam::213953080685:role/exec_lambda
+  profile: muayyad
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource: "*"
+  region: us-west-1
+  runtime: python3.8
+  versionFunctions: false
+  stage: ${env:STAGE, 'production'}
+  timeout: 60
+  deploymentBucket:
+    name: mozio-deployment
+    serverSideEncryption: AES256
+  apiGateway:
+    shouldStartNameWithService: true
+  lambdaHashingVersion: 20201221
+
+package:
+  individually: true
+  exclude:
+    - .env
+    - .git/**
+    - .github/**
+    - .serverless/**
+    - static/**
+    - .cache/**
+    - .pytest_cache/**
+    - node_modules/**
+    - db.sqlite3
+    - staticfiles/**
+    - .rpm

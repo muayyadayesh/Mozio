@@ -1,8 +1,8 @@
 from .base import *
 
 DEBUG = False
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[])
-
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
+print('ALLOWED_HOSTS', ALLOWED_HOSTS[0])
 # AWS Postgres remote DB
 DATABASES = {
     "default": {
@@ -35,13 +35,13 @@ AWS_QUERYSTRING_AUTH = False
 _AWS_EXPIRY = 60 * 60 * 24 * 7
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate"}
-AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default='us-east-2')
+AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default='us-west-1')
 AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
 aws_s3_domain = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-STATICFILES_STORAGE = "mozio.utils.StaticRootS3Boto3Storage"
+STATICFILES_STORAGE = "polygons.utils.utils.StaticRootS3Boto3Storage"
 COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 STATIC_URL = f"https://{aws_s3_domain}/static/"
-DEFAULT_FILE_STORAGE = "mozio.utils.MediaRootS3Boto3Storage"
+DEFAULT_FILE_STORAGE = "polygons.utils.utils.MediaRootS3Boto3Storage"
 MEDIA_URL = f"https://{aws_s3_domain}/media/"
 MEDIAFILES_LOCATION = "/media"
 STATICFILES_LOCATION = "/static"
@@ -55,7 +55,6 @@ TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
         [
             "django.template.loaders.filesystem.Loader",
             "django.template.loaders.app_directories.Loader",
-            "admin_tools.template_loaders.Loader",
         ],
     )
 ]

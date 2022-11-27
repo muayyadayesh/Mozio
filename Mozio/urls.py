@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
-from polygons import urls
+from django.urls import path, include
+from polygons import urls, views
 from rest_framework_swagger.views import get_swagger_view
 
 # define swagger documentation title
@@ -23,6 +23,7 @@ schema_view = get_swagger_view(title='Mozio API')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
     path('api/', include(urls)),
     path('api/', schema_view),  # Swagger schema
 ]
