@@ -8,7 +8,7 @@ https://app3oebcxb.execute-api.us-west-1.amazonaws.com/production
 
 ### Deplyoment
 
-The project project has been deployed to **AWS Serverless** using the **serverless** framework, with **Aurora DB**
+The project project has been deployed to **AWS Lambda Serverless** using the **serverless** framework, with **Aurora DB**
 
 ### Documentation
 
@@ -57,6 +57,12 @@ https://app3oebcxb.execute-api.us-west-1.amazonaws.com/production/api
    "currency":"USD"
 }
 ```
+
+### Flow
+
+- Goto the `api/providers`
+- Insert a new provider (you can use the above sample), take into account the geo_info array form.
+- Goto `api/polygon/long/lat`, replacing the (long) & (lat) with the point coordinates to lookup for
 
 ### Test credentials
 
