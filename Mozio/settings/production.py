@@ -1,8 +1,7 @@
 from .base import *
 
 DEBUG = False
-ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
-print('ALLOWED_HOSTS', ALLOWED_HOSTS[0])
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[''])
 # AWS Postgres remote DB
 DATABASES = {
     "default": {

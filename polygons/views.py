@@ -21,9 +21,10 @@ class ProvidersListApiView(APIView):
     * Requires token authentication.
     * All users are able to access this view.
     """
+    # permission to check if user is authenticated (AllowAny for testing purposes)
     permission_classes = [permissions.AllowAny]
 
-    # List all providers
+    # 1. List all providers
     def get(self, request, format=None):
         '''
         List all the providers in system
@@ -32,7 +33,7 @@ class ProvidersListApiView(APIView):
         serializer = ProviderSerializer(providers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # create new provider with service area
+    # 2. create new provider with a service area
     def post(self, request, *args, **kwargs):
         '''
         Create new provider with the payload
@@ -46,7 +47,7 @@ class ProvidersListApiView(APIView):
 
 
 class ProviderDetailApiView(APIView):
-    # permission to check if user is authenticated
+    # permission to check if user is authenticated (AllowAny for testing purposes)
     permission_classes = [permissions.AllowAny]
 
     def get_object(self, provider_id):
@@ -109,9 +110,10 @@ class ProviderDetailApiView(APIView):
 
 
 class PolygonServiceAreasApiView(GenericAPIView):
+    # permission to check if user is authenticated (AllowAny for testing purposes)
     permission_classes = [permissions.AllowAny]
-    # get service areas within a specific polygon
 
+    # 6. get service areas within a specific polygon
     def get(self, request, longitude, latitude, *args, **kwargs):
         """
         Takes latitude, longitude and returns a list of available polygons inside.
