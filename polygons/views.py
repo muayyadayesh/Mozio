@@ -124,8 +124,8 @@ class PolygonServiceAreasApiView(GenericAPIView):
             longitude = float(longitude)
             latitude = float(latitude)
             polygons = Provider.objects.all()
-            results = [item for item in polygons if check_coordinates(long=float(
-                longitude), lat=float(latitude), area_coordinates=item.service_area.geo_info)]
+            results = [item for item in polygons if check_coordinates(
+                long=longitude, lat=latitude, area_coordinates=item.service_area.geo_info)]
 
             serializer = ProviderSerializer(results, many=True)
             return Response({'service_areas': serializer.data},
