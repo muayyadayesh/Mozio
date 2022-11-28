@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from rest_framework import (permissions, status)
+from rest_framework import permissions, status
 from rest_framework.decorators import permission_classes
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -113,7 +113,8 @@ class PolygonServiceAreasApiView(GenericAPIView):
     # permission to check if user is authenticated (AllowAny for testing purposes)
     permission_classes = [permissions.AllowAny]
 
-    # 6. get service areas within a specific polygon
+    # 6. get all providers & service areas that contain a specific point (long,lat) within
+    # their operation locations
     def get(self, request, longitude, latitude, *args, **kwargs):
         """
         Takes latitude, longitude and returns a list of available polygons inside.
